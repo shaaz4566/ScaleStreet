@@ -1,0 +1,14 @@
+*{box-sizing:border-box}body{margin:0;background:#080a0c;color:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif}main{width:min(1000px,92vw);margin:auto;padding:40px 0 80px}header,.row{display:flex;justify-content:space-between;align-items:center;gap:20px}header{padding-bottom:30px;color:#888;font-size:.75rem;letter-spacing:.15em}.brand{color:#fff;font-weight:900;font-size:1.1rem;letter-spacing:-.05em;text-decoration:none}.brand span{color:#ffb000}.panel{background:#111417;border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:28px;margin:18px 0}h1{font-size:1.6rem;letter-spacing:-.04em;margin:0 0 8px}p{color:#888;line-height:1.6}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{display:grid;gap:7px;color:#aaa;font-size:.82rem;margin:12px 0}input,textarea{width:100%;background:#080a0c;border:1px solid #292d31;color:#fff;border-radius:12px;padding:13px;outline:none}input:focus,textarea:focus{border-color:#ffb000}.button{border:0;background:#f5f5f5;color:#080808;padding:13px 18px;border-radius:999px;font-weight:800;cursor:pointer}.item{display:grid;grid-template-columns:70px 1fr auto;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.07)}.item img{width:70px;height:70px;border-radius:12px;object-fit:cover;background:#181b1e}.item small{display:block;color:#777;margin-top:5px}.item button{background:#271517;color:#ff8d8d;border:0;border-radius:999px;padding:9px 13px;cursor:pointer}.muted{color:#777}@media(max-width:650px){.grid2{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}.row{align-items:flex-start;flex-direction:column}.item{grid-template-columns:55px 1fr}.item img{width:55px;height:55px}.item button{grid-column:2;width:max-content}}
+@media (min-width:1400px){main{width:min(1180px,90vw)}}
+@media (max-width:520px){
+  main{width:94vw;padding-top:24px}
+  .panel{padding:20px;border-radius:18px}
+  .item small{line-height:1.5}
+  .button{min-height:46px}
+}
+@media (max-width:360px){
+  main{width:96vw}
+  .panel{padding:16px}
+  .item{grid-template-columns:48px 1fr}
+  .item img{width:48px;height:48px}
+}
