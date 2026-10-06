@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scale Street — Product Manager</title><link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<main>
+  <header><a href="index.html" class="brand">SCALE<span>STREET</span></a><span>PRODUCT MANAGER</span></header>
+  <section class="panel">
+    <h1>Store settings</h1>
+    <p>Enter the real WhatsApp number and UPI ID. These values are exported into the static website.</p>
+    <div class="grid2">
+      <label>WhatsApp number<input id="wa" placeholder="919876543210"></label>
+      <label>UPI ID<input id="upi" placeholder="yourname@upi"></label>
+    </div>
+  </section>
+  <section class="panel">
+    <h1>Add product</h1>
+    <form id="productForm">
+      <div class="grid2">
+        <label>Product name<input id="name" required></label>
+        <label>Brand<input id="brand"></label>
+        <label>Scale<input id="scale" placeholder="1:64"></label>
+        <label>Category<input id="category"></label>
+        <label>Price (INR)<input id="price" type="number" min="0" required></label>
+        <label>Stock<input id="stock" type="number" min="0" required></label>
+      </div>
+      <label>Description<textarea id="description" rows="4"></textarea></label>
+      <label>Product image<input id="image" type="file" accept="image/*" required></label>
+      <button class="button" type="submit">Add product</button>
+    </form>
+  </section>
+  <section class="panel">
+    <div class="row"><h1>Products</h1><button id="exportBtn" class="button">Export website data</button></div>
+    <div id="products"></div>
+  </section>
+</main>
+<script>
+let items=[];const KEY="scaleStreetAdminProducts";
+const settings=JSON.parse(localStorage.getItem("scaleStreetSettings")||"{}");
+document.querySelector("#wa").value=settings.whatsappNumber||"";document.querySelector("#upi").value=settings.upiId||"";
+try{items=JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){items=[]}
+const $=s=>document.querySelector(s);
+function save(){localStorage.setItem(KEY,JSON.stringify(items));localStorage.setItem("scaleStreetSettings",JSON.stringify({whatsappNumber:$("#wa").value.trim(),upiId:$("#upi").value.trim()}));render();}
+function render(){const box=$("#products");box.innerHTML=items.length?items.map((p,i)=>`<article class="item"><img src="${p.image}"><div><b>${esc(p.name)}</b><small>${esc(p.brand||"")} • ${esc(p.scale||"")} • ₹${Number(p.price).toLocaleString("en-IN")} • Stock ${p.stock} • <b class="${Number(p.stock)>0?"ok":"no"}">${Number(p.stock)>0?"In Stock":"Out Of Stock"}</b></small></div><button onclick="del(${i})">Delete</button></article>`).join(""):`<p class="muted">No products added yet.</p>`}
+function del(i){if(confirm("Delete this product?")){items.splice(i,1);save()}}
+$("#productForm").addEventListener("submit",e=>{e.preventDefault();const f=$("#image").files[0];if(!f)return;const r=new FileReader();r.onload=()=>{items.push({id:crypto.randomUUID(),name:$("#name").value.trim(),brand:$("#brand").value.trim(),scale:$("#scale").value.trim(),category:$("#category").value.trim(),price:Number($("#price").value),stock:Number($("#stock").value),description:$("#description").value.trim(),image:r.result});save();e.target.reset();alert("Product added to this browser's local manager.");};r.readAsDataURL(f)});
+$("#wa").addEventListener("change",save);$("#upi").addEventListener("change",save);
+$("#exportBtn").addEventListener("click",()=>{const out=`window.SCALE_STREET_PRODUCTS = ${JSON.stringify(items)};\nwindow.SCALE_STREET_CONFIG = ${JSON.stringify({whatsappNumber:$("#wa").value.trim(),upiId:$("#upi").value.trim(),currency:"₹"})};\n`;const blob=new Blob([out],{type:"text/javascript"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="products.js";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
+function esc(v){return String(v||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]) )}
+render();
+</script>
+</body></html>
